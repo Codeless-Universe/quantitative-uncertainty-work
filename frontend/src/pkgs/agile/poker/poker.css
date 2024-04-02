@@ -1,0 +1,41 @@
+.poker {
+  aspect-ratio: 3 / 4;
+  width: 100%;
+  max-width: 300px;
+  /* height: 400px; */
+  /* width: 300px;
+  height: 400px;
+  perspective: 1000px; */
+}
+
+.poker-inner {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+
+.poker.flipped .poker-inner {
+  transform: rotateY(180deg);
+}
+
+.poker-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* font-size: 24px; */
+  /* font-weight: bold; */
+  color: white;
+}
+
+.front {
+  transform: rotateY(0deg);
+}
+
+.back {
+  transform: rotateY(180deg);
+}
