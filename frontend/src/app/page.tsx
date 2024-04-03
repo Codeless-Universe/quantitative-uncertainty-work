@@ -8,5 +8,5 @@ export default function Home(props: {}) {
   const [reloadAt, setReloadAt] = useState(0);
   const query = api.post.hello.useQuery({ text: "from tRPC" });
 
-  return <PageWrap className="">{/* <FirebaseTest /> */}Codeless Universe</PageWrap>;
+  return <PageWrap className="">{<FirebaseTest />}Codeless Universe</PageWrap>;
 }

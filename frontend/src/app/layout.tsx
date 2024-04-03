@@ -14,6 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <meta name="Cross-Origin-Opener-Policy" content="same-origin"></meta>
       <TRPCReactProvider>
         <NextUIApp>{children}</NextUIApp>
       </TRPCReactProvider>
