@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { FirebaseAdminHelper } from "@/pkgs/firebase-admin/FirebaseAdminHelper";
 
 let post = {
   id: 1,
@@ -8,13 +9,14 @@ let post = {
 };
 
 export const postRouter = createTRPCRouter({
-  create: publicProcedure.input(z.object({ name: z.string().min(1) })).mutation(async ({ input }) => {
-    // simulate a slow db call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    post = { id: post.id + 1, name: input.name };
-    return post;
-  }),
+  create: publicProcedure
+    .input(z.object({ name: z.string().min(1), introduce: z.string().optional() }))
+    .mutation(async ({ input }) => {
+      const res = await FirebaseAdminHelper.db
+        .collection("project")
+        .add({ name: input.name, introduce: input.introduce });
+      return res.id;
+    }),
 
   getLatest: publicProcedure.query(() => {
     return post;
