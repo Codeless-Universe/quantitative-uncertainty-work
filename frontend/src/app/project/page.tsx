@@ -8,7 +8,7 @@ export default function Home(props: {}) {
   const query = api.project.myProjects.useQuery({});
 
   return (
-    <PageWrap className="" isLoading={query.isLoading}>
+    <PageWrap className="" isLoading={query.isLoading || true}>
       {JSON.stringify(query.data)}
     </PageWrap>
   );
