@@ -15,21 +15,11 @@ export function CreatePost() {
     },
   });
 
-  const createProject = api.project.create.useMutation({
-    onSuccess: () => {
-      console.log("done");
-    },
-  });
-
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        // createPost.mutate({ name });
-        createProject.mutate({
-          name: "1111",
-          introduce: "hello",
-        });
+        createPost.mutate({ name });
       }}
       className="flex flex-col gap-2"
     >
