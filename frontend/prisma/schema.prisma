@@ -30,10 +30,12 @@ model account {
   avatar        String? @db.VarChar()
   nickname      String? @db.VarChar()
 
-  provider        String?
-  account_session account_session[]
-  project         project[]
-  project_member  project_member[]
+  provider                        String?
+  account_session                 account_session[]
+  project                         project[]
+  project_member                  project_member[]
+  project_agile_poker             project_agile_poker[]
+  project_agile_poker_item_record project_agile_poker_item_record[]
 }
 
 model account_session {
@@ -67,9 +69,12 @@ model project {
   createdAccount   account @relation(fields: [createdAccountId], references: [id])
   createdAccountId String  @db.Char(36)
 
-  name           String?          @db.VarChar()
-  introduce      String?          @db.VarChar()
-  project_member project_member[]
+  name                            String?                           @db.VarChar()
+  introduce                       String?                           @db.VarChar()
+  project_member                  project_member[]
+  project_agile_poker             project_agile_poker[]
+  project_agile_poker_item        project_agile_poker_item[]
+  project_agile_poker_item_record project_agile_poker_item_record[]
 
   @@index([createdAccountId])
 }
@@ -91,4 +96,71 @@ model project_member {
   role        String  @db.VarChar()
 
   @@index([accountId])
+}
+
+model project_agile_poker {
+  id        String   @id @default(uuid()) @db.Char(36)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deleted   Boolean  @default(false)
+  sortIndex Int      @default(0)
+
+  project   project @relation(fields: [projectId], references: [id])
+  projectId String  @db.Char(36)
+
+  account   account? @relation(fields: [accountId], references: [id])
+  accountId String?  @db.Char(36)
+
+  name        String? @db.VarChar()
+  meetingLink String? @db.VarChar()
+  task        String? @db.Text()
+
+  project_agile_poker_item        project_agile_poker_item[]
+  project_agile_poker_item_record project_agile_poker_item_record[]
+}
+
+model project_agile_poker_item {
+  id        String   @id @default(uuid()) @db.Char(36)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deleted   Boolean  @default(false)
+  sortIndex Int      @default(0)
+
+  project   project @relation(fields: [projectId], references: [id])
+  projectId String  @db.Char(36)
+
+  project_agile_poker   project_agile_poker @relation(fields: [project_agile_pokerId], references: [id])
+  project_agile_pokerId String              @db.Char(36)
+
+  taskIndex   Int?    @db.Integer()
+  taskContent String? @db.Text()
+
+  resultHour   Int?
+  resultDetail Json?
+
+  endAt                           DateTime?
+  project_agile_poker_item_record project_agile_poker_item_record[]
+}
+
+model project_agile_poker_item_record {
+  id        String   @id @default(uuid()) @db.Char(36)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deleted   Boolean  @default(false)
+  sortIndex Int      @default(0)
+
+  project   project @relation(fields: [projectId], references: [id])
+  projectId String  @db.Char(36)
+
+  project_agile_poker   project_agile_poker @relation(fields: [project_agile_pokerId], references: [id])
+  project_agile_pokerId String              @db.Char(36)
+
+  project_agile_poker_item   project_agile_poker_item @relation(fields: [project_agile_poker_itemId], references: [id])
+  project_agile_poker_itemId String                   @db.Char(36)
+
+  account   account? @relation(fields: [accountId], references: [id])
+  accountId String?  @db.Char(36)
+
+  playCard Decimal @db.Decimal()
+  msg      String? @db.VarChar()
 }
