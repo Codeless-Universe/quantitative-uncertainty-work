@@ -13,11 +13,19 @@ export default function Home(props: {}) {
 
   return (
     <PageWrap className="" isLoading={query.isLoading}>
-      <div className="mb-2 flex flex-row items-center justify-center">
+      <div className="mb-4 flex flex-row items-end justify-center">
         <div className="grow text-small text-default-500">My Projects</div>
-        <Button color="primary">New +</Button>
+        <Button
+          color="primary"
+          onPress={() => {
+            routerHelper.router.push("/project/edit");
+          }}
+        >
+          New +
+        </Button>
       </div>
-      <EmptyWrap isEmpty={query.data?.length == 0}>
+
+      <EmptyWrap isEmpty={query.data?.length == 0} className="flex flex-col gap-2">
         {query.data?.map((item, index) => {
           return (
             <div key={index}>
@@ -25,7 +33,6 @@ export default function Home(props: {}) {
                 isPressable
                 className="w-full cursor-pointer"
                 onPress={() => {
-                  console.log("click");
                   routerHelper.router.push(`/project/${item.id}/`);
                 }}
               >

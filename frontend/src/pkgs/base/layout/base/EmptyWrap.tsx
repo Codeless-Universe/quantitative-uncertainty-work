@@ -20,7 +20,7 @@ export default function EmptyWrap({
   ...props
 }: {
   children?: React.ReactNode;
-  // className?: string;
+  className?: string;
   isLoading?: boolean;
   loadingDom?: React.ReactNode;
   isEmpty?: boolean;
@@ -32,5 +32,5 @@ export default function EmptyWrap({
   if (isEmpty) {
     return emptyDom;
   }
-  return props.children;
+  return <div className={props.className}>{props.children}</div>;
 }
