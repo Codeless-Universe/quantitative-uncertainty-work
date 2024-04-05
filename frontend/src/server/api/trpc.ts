@@ -72,7 +72,7 @@ export const createTRPCRouter = t.router;
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   return next({
     ctx: {
-      user: { name: "test" },
+      user: { name: "test", id: "f8083dc6-002a-4b90-b9e3-42396cf7dee8" },
     },
   });
 });
