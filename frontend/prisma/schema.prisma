@@ -1,0 +1,94 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model account {
+  id        String   @id @default(uuid()) @db.Char(36)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deleted   Boolean  @default(false)
+  sortIndex Int      @default(0)
+
+  canLogin Boolean @default(true)
+
+  cellphone     String? @unique
+  username      String? @unique
+  email         String? @unique @db.VarChar()
+  emailVerified Boolean @default(false)
+  password      String? @db.VarChar()
+  avatar        String? @db.VarChar()
+  nickname      String? @db.VarChar()
+
+  provider        String?
+  account_session account_session[]
+  project         project[]
+  project_member  project_member[]
+}
+
+model account_session {
+  id        String   @id @default(uuid()) @db.Char(36)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deleted   Boolean  @default(false)
+  sortIndex Int      @default(0)
+
+  account        account @relation(fields: [accountId], references: [id])
+  accountId      String  @db.Char(36)
+  ip             String? @db.VarChar()
+  ua             String? @db.VarChar()
+  deviceName     String? @db.VarChar()
+  os             String? @db.VarChar()
+  osVersion      String? @db.VarChar()
+  browserName    String? @db.VarChar()
+  browserVersion String? @db.VarChar()
+  loginProvider  String? @db.VarChar()
+
+  @@index([accountId])
+}
+
+model project {
+  id        String   @id @default(uuid()) @db.Char(36)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deleted   Boolean  @default(false)
+  sortIndex Int      @default(0)
+
+  createdAccount   account @relation(fields: [createdAccountId], references: [id])
+  createdAccountId String  @db.Char(36)
+
+  name           String?          @db.VarChar()
+  introduce      String?          @db.VarChar()
+  project_member project_member[]
+
+  @@index([createdAccountId])
+}
+
+model project_member {
+  id        String   @id @default(uuid()) @db.Char(36)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deleted   Boolean  @default(false)
+  sortIndex Int      @default(0)
+
+  account   account? @relation(fields: [accountId], references: [id])
+  accountId String?
+
+  project   project @relation(fields: [projectId], references: [id])
+  projectId String  @db.Char(36)
+
+  displayName String? @db.VarChar()
+  role        String  @db.VarChar()
+
+  @@index([accountId])
+}
