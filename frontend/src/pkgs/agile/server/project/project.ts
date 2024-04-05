@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/pkgs/prisma/server/db";
+import { project } from "@prisma/client";
 
 export const projectRouter = createTRPCRouter({
   create: publicProcedure
@@ -26,13 +27,20 @@ export const projectRouter = createTRPCRouter({
   myProjects: publicProcedure
     .input(z.object({ name: z.string().min(1), introduce: z.string().optional() }))
     .mutation(async ({ input, ctx }) => {
-      const res = await db.project.create({
-        data: {
-          name: input.name,
-          introduce: input.introduce,
-          createdAccountId: ctx.user.id,
+      const res = await db.project_member.findMany({
+        where: {
+          accountId: ctx.user.id,
+          deleted: false,
+        },
+        include: {
+          project: true,
         },
       });
-      return res;
+
+      const retList: project[] = [];
+      res.forEach((item) => {
+        retList.push(item.project);
+      });
+      return retList;
     }),
 });
