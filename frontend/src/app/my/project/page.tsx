@@ -1,4 +1,5 @@
 "use client";
+import { useRouterHelper } from "@/pkgs/base/helper/useRouterHelper";
 import EmptyWrap from "@/pkgs/base/layout/base/EmptyWrap";
 import PageWrap from "@/pkgs/base/layout/base/PageWrap";
 import { api } from "@/pkgs/trpc/react";
@@ -8,6 +9,7 @@ import { useState } from "react";
 export default function Home(props: {}) {
   const [reloadAt, setReloadAt] = useState(0);
   const query = api.project.myProjects.useQuery({});
+  const routerHelper = useRouterHelper({});
 
   return (
     <PageWrap className="" isLoading={query.isLoading}>
@@ -19,7 +21,14 @@ export default function Home(props: {}) {
         {query.data?.map((item, index) => {
           return (
             <div key={index}>
-              <Card>
+              <Card
+                isPressable
+                className="w-full cursor-pointer"
+                onPress={() => {
+                  console.log("click");
+                  routerHelper.router.push(`/project/${item.id}/`);
+                }}
+              >
                 <CardBody>
                   <div className="flex flex-col">
                     <p className="text-md">{item.name}</p>
