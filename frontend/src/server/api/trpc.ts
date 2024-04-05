@@ -42,8 +42,7 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
       ...shape,
       data: {
         ...shape.data,
-        zodError:
-          error.cause instanceof ZodError ? error.cause.flatten() : null,
+        zodError: error.cause instanceof ZodError ? error.cause.flatten() : null,
       },
     };
   },
@@ -70,4 +69,13 @@ export const createTRPCRouter = t.router;
  * guarantee that a user querying is authorized, but you can still access user session data if they
  * are logged in.
  */
-export const publicProcedure = t.procedure;
+const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
+  return next({
+    ctx: {
+      user: { name: "test" },
+    },
+  });
+});
+
+// export const publicProcedure = t.procedure;
+export const publicProcedure = t.procedure.use(enforceUserIsAuthed);
