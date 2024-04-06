@@ -57,7 +57,7 @@ export default function BreadcrumbNav() {
               {currentSelected()?.name}
             </Button>
           </DropdownTrigger>
-          <DropdownMenu aria-label="Routes" items={query.data}>
+          <DropdownMenu aria-label="Routes" items={query.data} disabledKeys={[params.projectId]}>
             {(item) => {
               return (
                 <DropdownItem key={item.id} href={`/project/${item.id}`}>
