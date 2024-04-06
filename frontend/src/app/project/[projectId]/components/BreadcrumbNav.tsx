@@ -8,8 +8,29 @@ import {
   Button,
 } from "@nextui-org/react";
 import { ChevronDownIcon } from "./ChevronDownIcon";
+import { api } from "@/pkgs/trpc/react";
+import { useRouterHelper } from "@/pkgs/base/helper/useRouterHelper";
+import { useParams } from "next/navigation";
+import EmptyWrap from "@/pkgs/base/layout/base/EmptyWrap";
 
 export default function BreadcrumbNav() {
+  const query = api.project.myProjects.useQuery({});
+  const params = useParams<{ projectId: string }>();
+
+  if (query.isLoading) {
+    return <div>loading</div>;
+  }
+
+  const currentSelected = () => {
+    let retItem: typeof query.data = [];
+    query.data?.forEach((item) => {
+      if (item.id == params.projectId) {
+        retItem?.push(item);
+      }
+    });
+    return retItem[0];
+  };
+
   return (
     <Breadcrumbs
       itemClasses={{
@@ -33,13 +54,17 @@ export default function BreadcrumbNav() {
               size="sm"
               variant="light"
             >
-              Songs
+              {currentSelected()?.name}
             </Button>
           </DropdownTrigger>
-          <DropdownMenu aria-label="Routes">
-            <DropdownItem href="#song-1">Song 1</DropdownItem>
-            <DropdownItem href="#song2">Song 2</DropdownItem>
-            <DropdownItem href="#song3">Song 3</DropdownItem>
+          <DropdownMenu aria-label="Routes" items={query.data}>
+            {(item) => {
+              return (
+                <DropdownItem key={item.id} href={`/project/${item.id}`}>
+                  {item.name}
+                </DropdownItem>
+              );
+            }}
           </DropdownMenu>
         </Dropdown>
       </BreadcrumbItem>
