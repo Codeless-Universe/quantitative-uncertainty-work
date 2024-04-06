@@ -10,6 +10,7 @@
     "db:push": "prisma db push --skip-generate --accept-data-loss",
     "db:studio": "prisma studio",
     "dev": "next dev",
+    "postinstall": "prisma generate",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
