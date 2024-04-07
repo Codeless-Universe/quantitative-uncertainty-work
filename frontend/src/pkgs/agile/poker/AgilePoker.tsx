@@ -5,17 +5,17 @@ import { User } from "@nextui-org/react";
 import SVGWrap from "@/pkgs/base/components/icon/SVGWrap";
 import SVGMapper from "@/pkgs/base/components/icon/SVGMapper";
 
-export function AgilePoker(props: { hours: string; msg: string }) {
+export function AgilePoker(props: { hours: string; msg: string; username?: string; userDescription?: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [canClose, setCanClose] = useState(true);
   const dom = useRef<HTMLDivElement | null>(null);
 
   const user = (
     <User
-      name={<div className="text-gray-700">Gaollg</div>}
-      description={<div className="text-gray-500">Java Developer</div>}
+      name={<div className="text-gray-700">{props.username}</div>}
+      description={<div className="text-gray-500">{props.userDescription}</div>}
       avatarProps={{
-        name: "Gaollg",
+        name: props.username,
         color: "primary",
       }}
     />
