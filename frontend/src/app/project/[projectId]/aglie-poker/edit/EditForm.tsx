@@ -27,7 +27,7 @@ export default function EditForm({ ...props }: { onSubmitDone?: () => void }) {
     const data = { ...formData, projectId: params.projectId };
     const res = await create.mutateAsync(data);
     props.onSubmitDone && props.onSubmitDone();
-    routerHelper.router.push("/project" + params.projectId + "/aglie-poker/detail/" + res.id);
+    routerHelper.router.push("/project/" + params.projectId + "/aglie-poker/detail?id=" + res.id);
   };
 
   return (
