@@ -1,5 +1,5 @@
 import { ConfettiHelper } from "@/pkgs/base/helper/ConfettiHelper";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./poker.css";
 import { User } from "@nextui-org/react";
 import SVGWrap from "@/pkgs/base/components/icon/SVGWrap";
@@ -21,12 +21,32 @@ export function AgilePoker(props: { hours: string; msg: string; username?: strin
     />
   );
 
+  useEffect(() => {
+    if (isOpen) {
+      ConfettiHelper.showConfetti(dom.current);
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    const fn = (e: KeyboardEvent) => {
+      if (e.key == "1") {
+        setIsOpen(true);
+      } else {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener("keydown", fn);
+
+    return () => {
+      window.removeEventListener("keydown", fn);
+    };
+  }, []);
+
   return (
     <div
       className={["poker cursor-pointer select-none", isOpen ? "flipped" : ""].join(" ")}
       onClick={() => {
         setIsOpen(!isOpen);
-        ConfettiHelper.showConfetti(dom.current);
       }}
     >
       <div className="poker-inner">
